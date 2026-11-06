@@ -1,0 +1,271 @@
+<div class="checkout-section" id="checkoutSection">
+    <h3 style="margin-bottom: 15px; color: #fff;">Checkout &mdash; <span id="selectedTierTitle" style="color: var(--accent);"></span></h3>
+    <form id="ticketForm" onsubmit="handleCheckout(event)">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="buyerName" placeholder="Peter Kimutai" required />
+        </div>
+        <div class="form-group">
+          <label>Tickets (Max: 10)</label>
+          <input type="number" id="ticketCount" min="1" max="10" value="1" onchange="calculateTotal()" required />
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="buyerEmail" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="buyerPhone" placeholder="+254712345678" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Select Payment Gateway</label>
+        <div class="payment-options">
+          <div class="pay-card selected" onclick="selectGateway('PayPal', this)">
+            <h5 style="color:#fff;">PayPal</h5>
+            <p style="font-size:0.7rem; color:var(--text-muted);">kimtrev28@gmail.com</p>
+          </div>
+          <div class="pay-card" onclick="selectGateway('Skrill', this)">
+            <h5 style="color:#fff;">Skrill</h5>
+            <p style="font-size:0.7rem; color:var(--text-muted);">sigeitrevin28@gmail.com</p>
+          </div>
+          <div class="pay-card" onclick="selectGateway('Airtm', this)">
+            <h5 style="color:#fff;">Airtm</h5>
+            <p style="font-size:0.7rem; color:var(--text-muted);">sigeitrevin28@gmail.com</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #0b0f19; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border);">
+        <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--accent);">
+          <span>Total Amount:</span>
+          <span id="totalDisplay">KSh 3,550</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-pay">Proceed to Pay & Generate Pass</button>
+    </form>
+  </div>
+
+  <div class="modal" id="paymentPromptModal">
+    <div class="modal-content">
+      <h3 style="color: var(--accent); margin-bottom: 10px;">Complete Your Payment</h3>
+      <p id="promptInstructions" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;"></p>
+      <div id="paymentActionArea"></div>
+      <button id="confirmPaymentBtn" onclick="confirmPaymentCompleted()" class="btn-pay" style="margin-top: 15px; opacity: 0.5; cursor: not-allowed;" disabled>I Have Completed Payment</button>
+      <button onclick="closePaymentModal()" style="background: transparent; color: var(--text-muted); margin-top: 5px; width: 100%;">Cancel</button>
+    </div>
+  </div>
+
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <h3 style="color: var(--accent);">Ticket Confirmed & Generated!</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Take a screenshot or save your official QR verification pass below:</p>
+      <div class="ticket-pass" id="ticketPassDetails"></div>
+      <div id="qrcode"></div>
+      <button onclick="closeModal()" class="btn-select">Done</button>
+    </div>
+  </div>
+
+  <div class="admin-section">
+    <h3>
+      <span>🔒 Admin Dashboard & Ticket Validator</span>
+      <button onclick="toggleAdminView()" style="background:#1e293b; color:#fff; font-size:0.75rem; padding:4px 8px;">Unlock Admin</button>
+    </h3>
+    <div id="adminContent" style="display: none;">
+      <div class="admin-stats">
+        <div class="stat-box">
+          <h5>TOTAL REVENUE</h5>
+          <p id="adminRevenue">KSh 0</p>
+        </div>
+        <div class="stat-box">
+          <h5>TICKETS SOLD</h5>
+          <p id="adminTicketsSold">0</p>
+        </div>
+        <div class="stat-box">
+          <h5>PAYMENT METHOD BREAKDOWN</h5>
+          <p id="adminGatewayStats" style="font-size: 0.85rem; font-weight: normal; color: var(--accent-blue);">PayPal: 0 | Skrill: 0 | Airtm: 0</p>
+        </div>
+      </div>
+      <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
+        <h5 style="color:#fff; margin-bottom: 10px;">Gate Entry QR / ID Validator</h5>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="scanInput" placeholder="Enter Ticket ID (e.g. TS-722564)" />
+          <button onclick="validateTicketAdmin()" style="background: var(--accent); color: #000; width: 120px;">Validate</button>
+        </div>
+        <div id="validationResult" style="margin-top: 10px; font-weight: bold; font-size: 0.9rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentTierName = '';
+    let basePriceKes = 0;
+    let selectedGatewayName = 'PayPal';
+    const BOOKING_FEE_KES = 50;
+    let salesLedger = [];
+    try {
+      salesLedger = JSON.parse(localStorage.getItem('talanta_sales_ledger')) || [];
+    } catch(e) {
+      salesLedger = [];
+    }
+
+    const rates = {
+      KES: { rate: 1, symbol: 'KSh ' },
+      USD: { rate: 0.0077, symbol: '$' },
+      EUR: { rate: 0.0073, symbol: '€' }
+    };
+
+    function updateCurrency() {
+      const currency = document.getElementById('currencySelect').value;
+      const { rate, symbol } = rates[currency];
+      document.querySelectorAll('.tier-price').forEach(el => {
+        const kesVal = parseFloat(el.getAttribute('data-kes'));
+        el.innerText = symbol + Math.round(kesVal * rate).toLocaleString();
+      });
+      if(basePriceKes > 0) calculateTotal();
+    }
+
+    function selectTier(name, priceKes) {
+      currentTierName = name;
+      basePriceKes = priceKes;
+      document.getElementById('selectedTierTitle').innerText = name + ' (' + priceKes.toLocaleString() + ' KSh)';
+      document.getElementById('checkoutSection').style.display = 'block';
+      document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth' });
+      calculateTotal();
+    }
+
+    function calculateTotal() {
+      const qty = parseInt(document.getElementById('ticketCount').value) || 1;
+      const currency = document.getElementById('currencySelect').value;
+      const { rate, symbol } = rates[currency];
+      const totalKes = (basePriceKes * qty) + BOOKING_FEE_KES;
+      document.getElementById('totalDisplay').innerText = symbol + Math.round(totalKes * rate).toLocaleString();
+    }
+
+    function selectGateway(gateway, element) {
+      selectedGatewayName = gateway;
+      document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    let activeOrderTemp = null;
+
+    function handleCheckout(e) {
+      e.preventDefault();
+      const name = document.getElementById('buyerName').value;
+      const email = document.getElementById('buyerEmail').value;
+      const phone = document.getElementById('buyerPhone').value;
+      const qty = parseInt(document.getElementById('ticketCount').value);
+      const totalKes = (basePriceKes * qty) + BOOKING_FEE_KES;
+
+      activeOrderTemp = {
+        ticketId: 'TS-' + Math.floor(100000 + Math.random() * 900000),
+        name: name, email: email, phone: phone, qty: qty, totalKes: totalKes,
+        tier: currentTierName,
+        gateway: selectedGatewayName,
+        status: 'VALID'
+      };
+
+      const promptText = document.getElementById('promptInstructions');
+      const actionArea = document.getElementById('paymentActionArea');
+      
+      const confirmBtn = document.getElementById('confirmPaymentBtn');
+      confirmBtn.disabled = true;
+      confirmBtn.style.opacity = '0.5';
+      confirmBtn.style.cursor = 'not-allowed';
+
+      const unlockAction = "document.getElementById('confirmPaymentBtn').disabled = false; document.getElementById('confirmPaymentBtn').style.opacity = '1'; document.getElementById('confirmPaymentBtn').style.cursor = 'pointer';";
+
+      if (selectedGatewayName === 'PayPal') {
+        promptText.innerText = 'Click below to send $' + (totalKes * 0.0077).toFixed(2) + ' USD directly to PayPal merchant: kimtrev28@gmail.com';
+        actionArea.innerHTML = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=kimtrev28@gmail.com&amount=' + (totalKes * 0.0077).toFixed(2) + '&currency_code=USD&item_name=Bayern+vs+Ajax+Tickets" target="_blank" onclick="' + unlockAction + '" style="display:block; background:#0070ba; color:#fff; text-decoration:none; padding:12px; border-radius:6px; font-weight:bold;">Pay with PayPal (kimtrev28@gmail.com)</a>';
+      } else if (selectedGatewayName === 'Skrill') {
+        promptText.innerText = 'Click below to complete Skrill transfer to merchant: sigeitrevin28@gmail.com';
+        actionArea.innerHTML = '<a href="https://www.skrill.com" target="_blank" onclick="' + unlockAction + '" style="display:block; background:#8a1538; color:#fff; text-decoration:none; padding:12px; border-radius:6px; font-weight:bold;">Open Skrill (Transfer to sigeitrevin28@gmail.com)</a>';
+      } else if (selectedGatewayName === 'Airtm') {
+        promptText.innerText = 'Send KSh ' + totalKes.toLocaleString() + ' equivalent to Airtm account: sigeitrevin28@gmail.com';
+        actionArea.innerHTML = '<a href="https://app.airtm.com" target="_blank" onclick="' + unlockAction + '" style="display:block; background:#00c3af; color:#000; text-decoration:none; padding:12px; border-radius:6px; font-weight:bold;">Open Airtm (Send to sigeitrevin28@gmail.com)</a>';
+      }
+
+      document.getElementById('paymentPromptModal').style.display = 'flex';
+    }
+
+    function confirmPaymentCompleted() {
+      document.getElementById('paymentPromptModal').style.display = 'none';
+      salesLedger.push(activeOrderTemp);
+      try { localStorage.setItem('talanta_sales_ledger', JSON.stringify(salesLedger)); } catch(e){}
+      updateAdminDashboard();
+
+      const passHtml = '<div style="font-family: monospace; font-size: 0.85rem;">' +
+        '<strong>Match:</strong> Bayern vs Ajax<br/>' +
+        '<strong>Venue:</strong> Talanta Sports City, Nairobi<br/>' +
+        '<strong>Ticket ID:</strong> <span style="color: #3b82f6; font-weight: bold;">' + activeOrderTemp.ticketId + '</span><br/>' +
+        '<strong>Holder:</strong> ' + activeOrderTemp.name + ' (' + activeOrderTemp.qty + ' Seats)<br/>' +
+        '<strong>Paid:</strong> KSh ' + activeOrderTemp.totalKes.toLocaleString() + ' via ' + activeOrderTemp.gateway + '<br/>' +
+        '<strong>Status:</strong> <span style="color: green; font-weight: bold;">VALID PASS</span>' +
+        '</div>';
+
+      document.getElementById('ticketPassDetails').innerHTML = passHtml;
+      
+      const qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=' + encodeURIComponent(activeOrderTemp.ticketId);
+      document.getElementById('qrcode').innerHTML = '<img src="' + qrApiUrl + '" alt="Ticket QR Code" width="160" height="160" />';
+
+      document.getElementById('successModal').style.display = 'flex';
+    }
+
+    function closePaymentModal() { document.getElementById('paymentPromptModal').style.display = 'none'; }
+    function closeModal() {
+      document.getElementById('successModal').style.display = 'none';
+      document.getElementById('checkoutSection').style.display = 'none';
+      document.getElementById('ticketForm').reset();
+    }
+
+    function toggleAdminView() {
+      const pin = prompt("Enter Admin Secret PIN Code:");
+      if (pin === "6295") {
+        document.getElementById('adminContent').style.display = 'block';
+        updateAdminDashboard();
+      } else {
+        alert("Incorrect PIN");
+      }
+    }
+
+    function updateAdminDashboard() {
+      let totalRev = 0, totalTickets = 0, paypalCount = 0, skrillCount = 0, airtmCount = 0;
+      salesLedger.forEach(item => {
+        totalRev += item.totalKes;
+        totalTickets += item.qty;
+        if(item.gateway === 'PayPal') paypalCount++;
+        else if(item.gateway === 'Skrill') skrillCount++;
+        else if(item.gateway === 'Airtm') airtmCount++;
+      });
+
+      document.getElementById('adminRevenue').innerText = 'KSh ' + totalRev.toLocaleString();
+      document.getElementById('adminTicketsSold').innerText = totalTickets;
+      document.getElementById('adminGatewayStats').innerText = 'PayPal: ' + paypalCount + ' | Skrill: ' + skrillCount + ' | Airtm: ' + airtmCount;
+    }
+
+    function validateTicketAdmin() {
+      const id = document.getElementById('scanInput').value.trim();
+      const match = salesLedger.find(t => t.ticketId === id);
+      const res = document.getElementById('validationResult');
+
+      if(!match) {
+        res.innerHTML = '<span style="color: var(--danger);">❌ INVALID TICKET ID</span>';
+      } else if (match.status === 'USED') {
+        res.innerHTML = '<span style="color: var(--danger);">⚠️ ALREADY SCAN VERIFIED (USED)</span>';
+      } else {
+        match.status = 'USED';
+        try { localStorage.setItem('talanta_sales_ledger', JSON.stringify(salesLedger)); } catch(e){}
+        res.innerHTML = '<span style="color: var(--accent);">✅ VALID PASS - ACCESS GRANTED (' + match.name + ')</span>';
+      }
+    }
+  </script>
+</body>
+</html>
