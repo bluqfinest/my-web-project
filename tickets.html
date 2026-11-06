@@ -5,68 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Talanta Sports City | Official Bayern vs Ajax Tickets</title>
   <style>
-    :root {
-      --bg: #0b0f19;
-      --card-bg: #131b2e;
-      --border: #1e293b;
-      --accent: #38ef7d;
-      --accent-blue: #3b82f6;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --danger: #ef4444;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    :root { --bg: #0b0f19; --card-bg: #131b2e; --border: #1e293b; --accent: #38ef7d; --accent-blue: #3b82f6; --text: #f8fafc; --text-muted: #94a3b8; --danger: #ef4444; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background: var(--bg); color: var(--text); line-height: 1.6; padding: 15px; max-width: 1200px; margin: 0 auto; }
-
     header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .logo-area h1 { font-size: 1.3rem; color: #fff; display: flex; align-items: center; gap: 8px; }
     .logo-area span { color: var(--accent); font-size: 0.8rem; background: rgba(56, 239, 125, 0.1); padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(56, 239, 125, 0.3); }
-
     .currency-selector select { background: #1e293b; color: #fff; border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
-
-    .hero-banner { 
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(11, 15, 25, 0.95) 100%), 
-                  url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat; 
-      border: 1px solid var(--border); 
-      border-radius: 14px; 
-      padding: 35px 25px; 
-      margin-bottom: 25px; 
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-    }
+    .hero-banner { background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(11, 15, 25, 0.95) 100%), url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat; border: 1px solid var(--border); border-radius: 14px; padding: 35px 25px; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); }
     .hero-banner h2 { font-size: 1.9rem; margin-top: 8px; margin-bottom: 5px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
     .match-meta { color: #e2e8f0; font-size: 0.9rem; font-weight: 500; margin-bottom: 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
-
     .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
     .tier-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
     .tier-card.sold-out { opacity: 0.6; border-color: var(--danger); }
     .tier-badge { position: absolute; top: 12px; right: 12px; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     .badge-sold { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
     .badge-avail { background: rgba(56, 239, 125, 0.2); color: var(--accent); border: 1px solid var(--accent); }
-
     .tier-price { font-size: 1.4rem; font-weight: bold; color: var(--accent); margin: 8px 0; }
-    
     button { padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; transition: opacity 0.2s; }
     .btn-select { background: var(--accent-blue); color: #fff; width: 100%; }
     .btn-select:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
-
     .checkout-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 30px; display: none; }
     .form-group { margin-bottom: 12px; }
     label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
     input, select { width: 100%; padding: 10px; background: #0b0f19; border: 1px solid var(--border); border-radius: 6px; color: #fff; }
-    
     .payment-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
     @media (max-width: 600px) { .payment-options { grid-template-columns: 1fr; } }
     .pay-card { background: #0b0f19; border: 2px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; }
     .pay-card.selected { border-color: var(--accent); background: rgba(56, 239, 125, 0.05); }
-
     .btn-pay { background: linear-gradient(135deg, #11998e, #38ef7d); color: #000; width: 100%; font-size: 1rem; padding: 12px; }
-
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
     .modal-content { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-width: 480px; width: 100%; text-align: center; }
     .ticket-pass { background: #fff; color: #000; border-radius: 8px; padding: 15px; margin: 15px 0; text-align: left; }
     #qrcode { display: flex; justify-content: center; margin: 15px 0; }
-
     .admin-section { background: #080c14; border: 1px dashed var(--border); border-radius: 12px; padding: 20px; margin-top: 40px; }
     .admin-section h3 { color: var(--accent-blue); margin-bottom: 15px; display: flex; justify-content: space-between; }
     .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
@@ -76,11 +47,8 @@
   </style>
 </head>
 <body>
-
   <header>
-    <div class="logo-area">
-      <h1>Talanta Sports City <span>Official Portal</span></h1>
-    </div>
+    <div class="logo-area"><h1>Talanta Sports City <span>Official Portal</span></h1></div>
     <div class="currency-selector">
       <select id="currencySelect" onchange="updateCurrency()">
         <option value="KES" selected>KES (KSh)</option>
@@ -89,96 +57,45 @@
       </select>
     </div>
   </header>
-
   <div class="hero-banner">
-    <span style="background: #3b82f6; color:#fff; font-size:0.75rem; padding: 4px 10px; border-radius:20px; font-weight:bold; letter-spacing:0.5px;">INAUGURAL MATCH</span>
+    <span style="background: #3b82f6; color:#fff; font-size:0.75rem; padding: 4px 10px; border-radius:20px; font-weight:bold;">INAUGURAL MATCH</span>
     <h2>FC Bayern Munich vs Ajax Amsterdam</h2>
     <div class="match-meta">📅 Tuesday, Jan 5, 2027 | ⏰ 19:00 EAT | 🏟️ Raila Odinga International Stadium</div>
   </div>
-
   <h3 style="margin-bottom: 12px; color: #fff;">Select Ticket Category</h3>
   <div class="tiers-grid">
-    <div class="tier-card sold-out">
-      <span class="tier-badge badge-sold">SOLD OUT</span>
-      <h4>Phase 1 (Terrace)</h4>
-      <div class="tier-price" data-kes="2500">KSh 2,500</div>
-      <button class="btn-select" disabled>Sold Out</button>
-    </div>
-
-    <div class="tier-card">
-      <span class="tier-badge badge-avail">912 left</span>
-      <h4>Phase 1 (Standard)</h4>
-      <div class="tier-price" data-kes="3500">KSh 3,500</div>
-      <button class="btn-select" onclick="selectTier('Phase 1 Standard', 3500)">Select Tier</button>
-    </div>
-
-    <div class="tier-card">
-      <span class="tier-badge badge-avail">2,618 left</span>
-      <h4>Phase 1 (VIP)</h4>
-      <div class="tier-price" data-kes="5000">KSh 5,000</div>
-      <button class="btn-select" onclick="selectTier('Phase 1 VIP', 5000)">Select Tier</button>
-    </div>
-
-    <div class="tier-card">
-      <span class="tier-badge badge-avail">1,652 left</span>
-      <h4>Level 1 (Executive)</h4>
-      <div class="tier-price" data-kes="15000">KSh 15,000</div>
-      <button class="btn-select" onclick="selectTier('Level 1 Executive', 15000)">Select Tier</button>
-    </div>
-  </div><div class="checkout-section" id="checkoutSection">
+    <div class="tier-card sold-out"><span class="tier-badge badge-sold">SOLD OUT</span><h4>Phase 1 (Terrace)</h4><div class="tier-price" data-kes="2500">KSh 2,500</div><button class="btn-select" disabled>Sold Out</button></div>
+    <div class="tier-card"><span class="tier-badge badge-avail">912 left</span><h4>Phase 1 (Standard)</h4><div class="tier-price" data-kes="3500">KSh 3,500</div><button class="btn-select" onclick="selectTier('Phase 1 Standard', 3500)">Select Tier</button></div>
+    <div class="tier-card"><span class="tier-badge badge-avail">2,618 left</span><h4>Phase 1 (VIP)</h4><div class="tier-price" data-kes="5000">KSh 5,000</div><button class="btn-select" onclick="selectTier('Phase 1 VIP', 5000)">Select Tier</button></div>
+    <div class="tier-card"><span class="tier-badge badge-avail">1,652 left</span><h4>Level 1 (Executive)</h4><div class="tier-price" data-kes="15000">KSh 15,000</div><button class="btn-select" onclick="selectTier('Level 1 Executive', 15000)">Select Tier</button></div>
+  </div>
+  <div class="checkout-section" id="checkoutSection">
     <h3 style="margin-bottom: 15px; color: #fff;">Checkout &mdash; <span id="selectedTierTitle" style="color: var(--accent);"></span></h3>
     <form id="ticketForm" onsubmit="handleCheckout(event)">
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="buyerName" placeholder="Peter Kimutai" required />
-        </div>
-        <div class="form-group">
-          <label>Tickets (Max: 10)</label>
-          <input type="number" id="ticketCount" min="1" max="10" value="1" onchange="calculateTotal()" required />
-        </div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="buyerName" placeholder="Peter Kimutai" required /></div>
+        <div class="form-group"><label>Tickets (Max: 10)</label><input type="number" id="ticketCount" min="1" max="10" value="1" onchange="calculateTotal()" required /></div>
       </div>
-
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="buyerEmail" placeholder="you@example.com" required />
-        </div>
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="buyerPhone" placeholder="+254712345678" required />
-        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="buyerEmail" placeholder="you@example.com" required /></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="buyerPhone" placeholder="+254712345678" required /></div>
       </div>
-
       <div class="form-group">
         <label>Select Payment Gateway</label>
         <div class="payment-options">
-          <div class="pay-card selected" onclick="selectGateway('PayPal', this)">
-            <h5 style="color:#fff;">PayPal</h5>
-            <p style="font-size:0.7rem; color:var(--text-muted);">kimtrev28@gmail.com</p>
-          </div>
-          <div class="pay-card" onclick="selectGateway('Skrill', this)">
-            <h5 style="color:#fff;">Skrill</h5>
-            <p style="font-size:0.7rem; color:var(--text-muted);">sigeitrevin28@gmail.com</p>
-          </div>
-          <div class="pay-card" onclick="selectGateway('Airtm', this)">
-            <h5 style="color:#fff;">Airtm</h5>
-            <p style="font-size:0.7rem; color:var(--text-muted);">sigeitrevin28@gmail.com</p>
-          </div>
+          <div class="pay-card selected" onclick="selectGateway('PayPal', this)"><h5 style="color:#fff;">PayPal</h5><p style="font-size:0.7rem; color:var(--text-muted);">kimtrev28@gmail.com</p></div>
+          <div class="pay-card" onclick="selectGateway('Skrill', this)"><h5 style="color:#fff;">Skrill</h5><p style="font-size:0.7rem; color:var(--text-muted);">sigeitrevin28@gmail.com</p></div>
+          <div class="pay-card" onclick="selectGateway('Airtm', this)"><h5 style="color:#fff;">Airtm</h5><p style="font-size:0.7rem; color:var(--text-muted);">sigeitrevin28@gmail.com</p></div>
         </div>
       </div>
-
       <div style="background: #0b0f19; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border);">
         <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--accent);">
-          <span>Total Amount:</span>
-          <span id="totalDisplay">KSh 3,550</span>
+          <span>Total Amount:</span><span id="totalDisplay">KSh 3,550</span>
         </div>
       </div>
-
       <button type="submit" class="btn-pay">Proceed to Pay & Generate Pass</button>
     </form>
   </div>
-
   <div class="modal" id="paymentPromptModal">
     <div class="modal-content">
       <h3 style="color: var(--accent); margin-bottom: 10px;">Complete Your Payment</h3>
@@ -188,7 +105,6 @@
       <button onclick="closePaymentModal()" style="background: transparent; color: var(--text-muted); margin-top: 5px; width: 100%;">Cancel</button>
     </div>
   </div>
-
   <div class="modal" id="successModal">
     <div class="modal-content">
       <h3 style="color: var(--accent);">Ticket Confirmed & Generated!</h3>
@@ -198,7 +114,6 @@
       <button onclick="closeModal()" class="btn-select">Done</button>
     </div>
   </div>
-
   <div class="admin-section">
     <h3>
       <span>🔒 Admin Dashboard & Ticket Validator</span>
@@ -206,18 +121,9 @@
     </h3>
     <div id="adminContent" style="display: none;">
       <div class="admin-stats">
-        <div class="stat-box">
-          <h5>TOTAL REVENUE</h5>
-          <p id="adminRevenue">KSh 0</p>
-        </div>
-        <div class="stat-box">
-          <h5>TICKETS SOLD</h5>
-          <p id="adminTicketsSold">0</p>
-        </div>
-        <div class="stat-box">
-          <h5>PAYMENT METHOD BREAKDOWN</h5>
-          <p id="adminGatewayStats" style="font-size: 0.85rem; font-weight: normal; color: var(--accent-blue);">PayPal: 0 | Skrill: 0 | Airtm: 0</p>
-        </div>
+        <div class="stat-box"><h5>TOTAL REVENUE</h5><p id="adminRevenue">KSh 0</p></div>
+        <div class="stat-box"><h5>TICKETS SOLD</h5><p id="adminTicketsSold">0</p></div>
+        <div class="stat-box"><h5>PAYMENT METHOD BREAKDOWN</h5><p id="adminGatewayStats" style="font-size: 0.85rem; font-weight: normal; color: var(--accent-blue);">PayPal: 0 | Skrill: 0 | Airtm: 0</p></div>
       </div>
       <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
         <h5 style="color:#fff; margin-bottom: 10px;">Gate Entry QR / ID Validator</h5>
@@ -229,25 +135,11 @@
       </div>
     </div>
   </div>
-
   <script>
-    let currentTierName = '';
-    let basePriceKes = 0;
-    let selectedGatewayName = 'PayPal';
-    const BOOKING_FEE_KES = 50;
+    let currentTierName = ''; let basePriceKes = 0; let selectedGatewayName = 'PayPal'; const BOOKING_FEE_KES = 50;
     let salesLedger = [];
-    try {
-      salesLedger = JSON.parse(localStorage.getItem('talanta_sales_ledger')) || [];
-    } catch(e) {
-      salesLedger = [];
-    }
-
-    const rates = {
-      KES: { rate: 1, symbol: 'KSh ' },
-      USD: { rate: 0.0077, symbol: '$' },
-      EUR: { rate: 0.0073, symbol: '€' }
-    };
-
+    try { salesLedger = JSON.parse(localStorage.getItem('talanta_sales_ledger')) || []; } catch(e) { salesLedger = []; }
+    const rates = { KES: { rate: 1, symbol: 'KSh ' }, USD: { rate: 0.0077, symbol: '$' }, EUR: { rate: 0.0073, symbol: '€' } };
     function updateCurrency() {
       const currency = document.getElementById('currencySelect').value;
       const { rate, symbol } = rates[currency];
@@ -257,16 +149,13 @@
       });
       if(basePriceKes > 0) calculateTotal();
     }
-
     function selectTier(name, priceKes) {
-      currentTierName = name;
-      basePriceKes = priceKes;
+      currentTierName = name; basePriceKes = priceKes;
       document.getElementById('selectedTierTitle').innerText = name + ' (' + priceKes.toLocaleString() + ' KSh)';
       document.getElementById('checkoutSection').style.display = 'block';
       document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth' });
       calculateTotal();
     }
-
     function calculateTotal() {
       const qty = parseInt(document.getElementById('ticketCount').value) || 1;
       const currency = document.getElementById('currencySelect').value;
@@ -274,15 +163,12 @@
       const totalKes = (basePriceKes * qty) + BOOKING_FEE_KES;
       document.getElementById('totalDisplay').innerText = symbol + Math.round(totalKes * rate).toLocaleString();
     }
-
     function selectGateway(gateway, element) {
       selectedGatewayName = gateway;
       document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
       element.classList.add('selected');
     }
-
     let activeOrderTemp = null;
-
     function handleCheckout(e) {
       e.preventDefault();
       const name = document.getElementById('buyerName').value;
@@ -290,23 +176,15 @@
       const phone = document.getElementById('buyerPhone').value;
       const qty = parseInt(document.getElementById('ticketCount').value);
       const totalKes = (basePriceKes * qty) + BOOKING_FEE_KES;
-
       activeOrderTemp = {
         ticketId: 'TS-' + Math.floor(100000 + Math.random() * 900000),
         name: name, email: email, phone: phone, qty: qty, totalKes: totalKes,
-        tier: currentTierName,
-        gateway: selectedGatewayName,
-        status: 'VALID'
+        tier: currentTierName, gateway: selectedGatewayName, status: 'VALID'
       };
-
       const promptText = document.getElementById('promptInstructions');
       const actionArea = document.getElementById('paymentActionArea');
-      
       const confirmBtn = document.getElementById('confirmPaymentBtn');
-      confirmBtn.disabled = true;
-      confirmBtn.style.opacity = '0.5';
-      confirmBtn.style.cursor = 'not-allowed';
-
+      confirmBtn.disabled = true; confirmBtn.style.opacity = '0.5'; confirmBtn.style.cursor = 'not-allowed';
       const unlockAction = "document.getElementById('confirmPaymentBtn').disabled = false; document.getElementById('confirmPaymentBtn').style.opacity = '1'; document.getElementById('confirmPaymentBtn').style.cursor = 'pointer';";
 
       if (selectedGatewayName === 'PayPal') {
@@ -317,18 +195,15 @@
         actionArea.innerHTML = '<a href="https://www.skrill.com" target="_blank" onclick="' + unlockAction + '" style="display:block; background:#8a1538; color:#fff; text-decoration:none; padding:12px; border-radius:6px; font-weight:bold;">Open Skrill (Transfer to sigeitrevin28@gmail.com)</a>';
       } else if (selectedGatewayName === 'Airtm') {
         promptText.innerText = 'Send KSh ' + totalKes.toLocaleString() + ' equivalent to Airtm account: sigeitrevin28@gmail.com';
-        actionArea.innerHTML = '<a href="app.airtm.com" target="_blank" onclick="' + unlockAction + '" style="display:block; background:#00c3af; color:#000; text-decoration:none; padding:12px; border-radius:6px; font-weight:bold;">Open Airtm (Send to sigeitrevin28@gmail.com)</a>';
+        actionArea.innerHTML = '<a href="https://app.airtm.com" target="_blank" onclick="' + unlockAction + '" style="display:block; background:#00c3af; color:#000; text-decoration:none; padding:12px; border-radius:6px; font-weight:bold;">Open Airtm (Send to sigeitrevin28@gmail.com)</a>';
       }
-
       document.getElementById('paymentPromptModal').style.display = 'flex';
     }
-
     function confirmPaymentCompleted() {
       document.getElementById('paymentPromptModal').style.display = 'none';
       salesLedger.push(activeOrderTemp);
       try { localStorage.setItem('talanta_sales_ledger', JSON.stringify(salesLedger)); } catch(e){}
       updateAdminDashboard();
-
       const passHtml = '<div style="font-family: monospace; font-size: 0.85rem;">' +
         '<strong>Match:</strong> Bayern vs Ajax<br/>' +
         '<strong>Venue:</strong> Talanta Sports City, Nairobi<br/>' +
@@ -337,52 +212,40 @@
         '<strong>Paid:</strong> KSh ' + activeOrderTemp.totalKes.toLocaleString() + ' via ' + activeOrderTemp.gateway + '<br/>' +
         '<strong>Status:</strong> <span style="color: green; font-weight: bold;">VALID PASS</span>' +
         '</div>';
-
       document.getElementById('ticketPassDetails').innerHTML = passHtml;
-      
       const qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=' + encodeURIComponent(activeOrderTemp.ticketId);
       document.getElementById('qrcode').innerHTML = '<img src="' + qrApiUrl + '" alt="Ticket QR Code" width="160" height="160" />';
-
       document.getElementById('successModal').style.display = 'flex';
     }
-
     function closePaymentModal() { document.getElementById('paymentPromptModal').style.display = 'none'; }
     function closeModal() {
       document.getElementById('successModal').style.display = 'none';
       document.getElementById('checkoutSection').style.display = 'none';
       document.getElementById('ticketForm').reset();
     }
-
     function toggleAdminView() {
       const pin = prompt("Enter Admin Secret PIN Code:");
       if (pin === "6295") {
         document.getElementById('adminContent').style.display = 'block';
         updateAdminDashboard();
-      } else {
-        alert("Incorrect PIN");
-      }
+      } else { alert("Incorrect PIN"); }
     }
-
     function updateAdminDashboard() {
       let totalRev = 0, totalTickets = 0, paypalCount = 0, skrillCount = 0, airtmCount = 0;
       salesLedger.forEach(item => {
-        totalRev += item.totalKes;
-        totalTickets += item.qty;
+        totalRev += item.totalKes; totalTickets += item.qty;
         if(item.gateway === 'PayPal') paypalCount++;
         else if(item.gateway === 'Skrill') skrillCount++;
         else if(item.gateway === 'Airtm') airtmCount++;
       });
-
       document.getElementById('adminRevenue').innerText = 'KSh ' + totalRev.toLocaleString();
       document.getElementById('adminTicketsSold').innerText = totalTickets;
       document.getElementById('adminGatewayStats').innerText = 'PayPal: ' + paypalCount + ' | Skrill: ' + skrillCount + ' | Airtm: ' + airtmCount;
     }
-
     function validateTicketAdmin() {
       const id = document.getElementById('scanInput').value.trim();
       const match = salesLedger.find(t => t.ticketId === id);
       const res = document.getElementById('validationResult');
-
       if(!match) {
         res.innerHTML = '<span style="color: var(--danger);">❌ INVALID TICKET ID</span>';
       } else if (match.status === 'USED') {
